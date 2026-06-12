@@ -1,0 +1,55 @@
+# OPC Memory Skill
+
+用于调用 OPC 记忆系统的工具技能。
+
+## 功能
+
+- 搜索历史对话记忆（语义搜索）
+- 写入重要记忆到知识库
+- 在回答问题前拉取相关历史上下文
+
+## API 地址
+
+http://127.0.0.1:17760
+
+## 我的 Agent ID
+
+**xiaoqi**（小启（职业教练））
+
+## 核心使用场景
+
+### 1. 每次对话开始时（自动）
+根据用户说的话，搜索相关历史记忆，注入上下文：
+```bash
+curl -s -X POST http://127.0.0.1:17760/memory/context \
+  -H "Content-Type: application/json" \
+  -d '{"agent_id":"xiaoqi","question":"<用户当前的问题>","max_items":5}'
+```
+
+### 2. 对话中产生重要信息时（主动写入）
+当用户透露重要信息（决策、情绪、背景、偏好）时，立刻写入：
+```bash
+curl -s -X POST http://127.0.0.1:17760/memory/search \
+  -H "Content-Type: application/json" \
+  -d '{"agent_id":"xiaoqi","query":"<关键词>","limit":3}'
+```
+
+### 3. 写入新记忆
+```bash
+curl -s -X POST http://127.0.0.1:17760/kb/add \
+  -H "Content-Type: application/json" \
+  -d '{"agent_id":"xiaoqi","content":"<内容>","topic":"<主题>","source":"conversation"}'
+```
+
+## 记忆触发原则
+
+**写入时机：**
+- 用户提到重要决策、转折点
+- 用户透露情绪状态、困扰
+- 用户的偏好、习惯、背景信息
+- 任何"下次还需要记得的事"
+
+**搜索时机：**
+- 用户提到过去发生的事
+- 话题与历史对话相关
+- 用户问"你还记得吗"类问题
