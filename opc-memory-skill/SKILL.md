@@ -8,7 +8,15 @@ http://127.0.0.1:17760
 
 ## 我的 Agent ID
 
-**xiaoqi**（小启（职业教练））
+**重要：不要硬编码 agent_id。**
+
+你的 agent_id = 你的 IDENTITY.md 里的英文 Name（小写），例如：
+- 小康 → `xiaokang`
+- 小启 → `xiaoqi`
+- 小真 → `xiaozhen`
+- 小范 → `xiaofan`
+
+每次调用 API 前，先确认自己是谁，用自己的 agent_id，绝不使用其他 agent 的 ID。
 
 ---
 
@@ -29,7 +37,7 @@ http://127.0.0.1:17760
 ```bash
 curl -s -X POST http://127.0.0.1:17760/memory/context \
   -H "Content-Type: application/json" \
-  -d '{"agent_id":"xiaoqi","question":"<用户当前的问题>","max_items":5}'
+  -d "{\"agent_id\":\"<YOUR_AGENT_ID>\",\"question\":\"<用户当前的问题>\",\"max_items\":5}"
 ```
 
 ## 2. 写入个人记忆（最常用的写入端点）
@@ -39,11 +47,7 @@ curl -s -X POST http://127.0.0.1:17760/memory/context \
 ```bash
 curl -s -X POST http://127.0.0.1:17760/memory/add \
   -H "Content-Type: application/json" \
-  -d '{
-    "agent_id":"xiaoqi",
-    "content":"<完整的事实陈述，含日期、人物、情境、结论>",
-    "metadata":{"type":"lesson|decision|preference|event","topic":"<主题>","date":"YYYY-MM-DD"}
-  }'
+  -d "{\"agent_id\":\"<YOUR_AGENT_ID>\",\"content\":\"<完整的事实陈述，含日期、人物、情境、结论>\",\"metadata\":{\"type\":\"lesson|decision|preference|event\",\"topic\":\"<主题>\",\"date\":\"YYYY-MM-DD\"}}"
 ```
 
 返回 `{"ok": true, "result": ...}` 才算成功。失败要把错误如实告诉用户，**不准谎报成功**。
@@ -55,7 +59,7 @@ curl -s -X POST http://127.0.0.1:17760/memory/add \
 ```bash
 curl -s -X POST http://127.0.0.1:17760/kb/add \
   -H "Content-Type: application/json" \
-  -d '{"agent_id":"xiaoqi","content":"<原则/模型/概念>","topic":"<主题>","source":"conversation","infer":false}'
+  -d "{\"agent_id\":\"<YOUR_AGENT_ID>\",\"content\":\"<原则/模型/概念>\",\"topic\":\"<主题>\",\"source\":\"conversation\",\"infer\":false}"
 ```
 
 ## 4. 搜索个人记忆
@@ -63,7 +67,7 @@ curl -s -X POST http://127.0.0.1:17760/kb/add \
 ```bash
 curl -s -X POST http://127.0.0.1:17760/memory/search \
   -H "Content-Type: application/json" \
-  -d '{"agent_id":"xiaoqi","query":"<关键词>","limit":3}'
+  -d "{\"agent_id\":\"<YOUR_AGENT_ID>\",\"query\":\"<关键词>\",\"limit\":3}"
 ```
 
 ## 5. 搜索共享知识库
@@ -71,7 +75,7 @@ curl -s -X POST http://127.0.0.1:17760/memory/search \
 ```bash
 curl -s -X POST http://127.0.0.1:17760/kb/search \
   -H "Content-Type: application/json" \
-  -d '{"agent_id":"xiaoqi","query":"<关键词>","limit":3}'
+  -d "{\"agent_id\":\"<YOUR_AGENT_ID>\",\"query\":\"<关键词>\",\"limit\":3}"
 ```
 
 ---
